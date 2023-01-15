@@ -3,7 +3,13 @@ const mainController = require('../controllers/main');
 
 const router = express.Router();
 
-router.get('/', mainController.home);
+
+router.get('/',
+(req,res, next) => {
+    req.session.userlogin ? res.locals.userlogin = req.session.userlogin : null
+    next()
+}
+, mainController.home);
 router.get('/books/detail/:id', mainController.bookDetail);
 router.get('/books/search', mainController.bookSearch);
 router.post('/books/search', mainController.bookSearchResult);
@@ -13,6 +19,7 @@ router.get('/users/register', mainController.register);
 router.post('/users/register', mainController.processRegister);
 router.get('/users/login', mainController.login);
 router.post('/users/login', mainController.processLogin);
+router.get('/users/logout', mainController.logout);
 router.delete('/books/:id', mainController.deleteBook);
 router.get('/books/edit/:id', mainController.edit);
 router.put('/books/edit/:id', mainController.processEdit);
